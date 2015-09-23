@@ -1,0 +1,52 @@
+CodeBook for Course Project of Getting and Cleaning Data
+
+Raw Data
+
+The raw data for this project is accelerometer data collected from the Samsung Galaxy S smartphone, and was provided to us at the links below:
+
+Data file: https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
+This data included both the raw sampled data (folder ../Inertial Signals) and features apparently based on the raw data. 
+For the purpose of this project, I only need the features measurement, not the raw data.
+
+The feature measurements were divided into two parts, one is the training data set which include all the feature measurements of 21 subjects (persons) on 6 different activities,
+the other is the test date set, which include all the feature measurements of 9 subjects (persons) on the same 6 different activities.
+
+For each of the test folder and training foler, there are 3 types of files to work with. 
+
+In the test folder,
+x_test.txt: contains 2947 rows with 561 feature measurements in column
+y_test.txt: the activity labels corresponding to each row of x_test.txt
+subject_test.txt: the subjects on which each row of X was measured. Encoded as numbers.
+
+
+In the train folder,
+x_train.txt: contains 7352 rows with 561 feature measurements in column
+y_test.txt: the activity labels corresponding to each row of x_train.txt
+subject_train.txt: the subjects on which each row of X was measured. Encoded as numbers.
+
+
+In addition, to determine which features are required, we look at the list of features: features.txt
+It include the list of 561 features for both the x_test.txt or x_train.txt
+
+Also, the 'activity_labels.txt' contains the 6 different activities that were measured.
+
+Data loading and merging
+
+The Y, S and X data is loaded from each of the training and test datasets, to form the testdata and traindata respectively. 
+Then the traindata and testdata are concatenated to form the completedata. To labeling the columns,
+I use the features list obtained from the feature.txt to label the columns of feature measurement, as well as the "Subject" and "Activity" columns. --Step1
+
+Column extractions
+In the second step, I extract the mean() and sd() columns from the completedata by examining the feature names (from features.txt) for patterns “-mean()” or “-std()”.
+A tidydata is generated which contains 10,299 observations and 68 columns (1 Subject column,1 Activity column, and 66 features columns)--Step2
+
+Modify the column names and activity label
+The activity labels (number 1 to 6) are replaced by the activity labels according to the information in the activity_label.txt--Step3
+The column names were modified to make them more descriptive.The column names are tidied by removing the “()”, etc.--Step4
+
+Reshape the data set to get the average of feature measurements for each subject on each activity--Step5
+All the feature measurements in columns were melted into two columns by keeping the Subject and Activity columns (change the wide-format to long-format). 
+Then calculate the average for each feature measurement within each subset of combinations of Subject and Activity.
+Finally, the data is reshaped back to the wide format, with the averages of each feature measurements in columns for each Subject and each Activity.   
+
+This result final_tidy_data.txt from last step is writen into tidy_data.txt for submission.
